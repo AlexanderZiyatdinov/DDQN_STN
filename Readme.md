@@ -7,6 +7,8 @@
 
 В настоящее время проблема **CartPole-v1**  широко распространена и используется в академических целях, а также в целях тестирования различных способов обучения с подкреплением.
 
+
+![enter image description here]https://www.machinelearningmastery.ru/img/0-245056-532679.gif
 ## ТЕХНИЧЕСКИЕ ДАННЫЕ
 
 ### Переменные состояния (States):
@@ -69,6 +71,22 @@ _**Начальное состояние**_ задается при помощи
     target_weights = target_weights * (1-TAU) + q_weights * TAU  где  0 < ТАУ
 
 Основное отличие заключается в данной функции:
+ ``` python
+ def update_target_model(self):
+        if not self.mode:
+            self.target_model.set_weights(self.model.get_weights())
+            return
+
+        if self.mode == 'soft':
+            q_model_theta = self.model.get_weights()
+            target_model_th = self.target_model.get_weights()
+            counter = 0
+            for q_weight, target_weight in zip(q_model_theta, target_model_th):
+                target_weight = target_weight * (1 - TAU) + q_weight * TAU
+                target_model_th[counter] = target_weight
+                counter += 1
+            self.target_model.set_weights(target_model_th)
+  ```
 
 
 ## АНАЛИЗ РЕЗУЛЬТАТОВ
